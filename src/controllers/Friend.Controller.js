@@ -1,4 +1,4 @@
-const { friends } = require("../../Models/Friends.model");
+const { friends } = require("../Models/Friends.model");
 
 // ~# All Logical call back controllers, get Access to request and response
 
