@@ -1,12 +1,23 @@
-const express = require("express");
-const { friendRouter } = require("./Routers/Friend.router");
+require("dotenv").config({ path: __dirname + "/.env" });
 
-const app = express();
+// ~# Request -> Router -> Controller -> Model
 
-app.use(express.json()); // ~* Middleware added, This middleware takes the request body, converts it to JSON and add it to req in the callback function
+const http = require("http");
+const { app } = require("./app");
+const { planetsLoader } = require("./Models/planets/Planets.model.js");
 
-app.use("/friends", friendRouter); // ~^ Mounting a Router, This router will take friends as its initial path and add it in front of any routes defined inside it
+const PORT = process.env.PORT || 8000;
 
-app.listen(3000, () => {
-  console.log(`Server is running on PORT: ${3000}`);
-});
+const server = http.createServer(app); // * This is better because now we have express capabilities + Bare bone node server capabilities some which express dont have
+
+// ~^ Express is just like a middleware to which we nest more middleware
+
+// ~# Loading the data from database before starting Server
+const preloadDataBeforeServerStart = async () => {
+  await planetsLoader;
+  server.listen(PORT, () => {
+    console.log(`Server is running on PORT: ${PORT}`);
+  });
+};
+
+preloadDataBeforeServerStart();
