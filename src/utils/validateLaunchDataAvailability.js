@@ -1,5 +1,5 @@
 const validateLaunchDataAvailability = (launchData) => {
-  const requiredFields = ["mission", "rocket", "launchDate", "destination"];
+  const requiredFields = ["mission", "rocket", "launchDate", "target"];
 
   for (let i = 0; i < requiredFields.length; i++) {
     if (!launchData[requiredFields[i]]) {

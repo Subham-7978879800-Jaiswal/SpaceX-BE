@@ -1,4 +1,5 @@
 require("dotenv").config({ path: __dirname + "/.env" });
+const { connectToDB } = require("./db");
 
 // ~# Request -> Router -> Controller -> Model
 
@@ -14,6 +15,7 @@ const server = http.createServer(app); // * This is better because now we have e
 
 // ~# Loading the data from database before starting Server
 const preloadDataBeforeServerStart = async () => {
+  await connectToDB();
   await planetsLoader;
   server.listen(PORT, () => {
     console.log(`Server is running on PORT: ${PORT}`);
