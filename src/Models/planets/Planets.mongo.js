@@ -35,7 +35,6 @@ const getAllHabitablePlanets = async () => {
   try {
     const filter = { name: "Habitable Planets" };
     const document = await PlanetsModel.findOne(filter);
-    console.log("DOC", document);
     return { success: true, document };
   } catch (error) {
     return { success: false, error: `${error}` };

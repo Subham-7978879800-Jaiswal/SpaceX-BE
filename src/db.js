@@ -13,7 +13,7 @@ const connectToDB = async () => {
   await mongoose
     .connect(MONGODB_URI, options)
     .then(() => {
-      console.log("MongoDB connected successfully");
+      ("MongoDB connected successfully");
     })
     .catch((error) => {
       console.error("MongoDB connection error:", error);

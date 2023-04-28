@@ -18,7 +18,7 @@ const server = http.createServer(app); // * This is better because now we have e
 const preloadDataBeforeServerStart = async () => {
   await connectToDB();
   await planetsLoader();
-  console.log(await loadAllSpaceXData());
+  await loadAllSpaceXData();
   server.listen(PORT, () => {
     console.log(`Server is running on PORT: ${PORT}`);
   });
