@@ -152,14 +152,12 @@ const abortLaunchFromModel = async (flightNumber) => {
 
 const loadAllSpaceXData = async () => {
   try {
-    console.log(SPACEX_URL);
-    console.log("SPACEX_URL");
-
+   
     const res = await axios.post(SPACEX_URL, SPACEX_API_QUERY);
 
     const { docs: allLaunchDataFromSpaceX } = res.data;
 
-    console.log(res);
+    
 
     const allSpaceXDocs = [];
 
