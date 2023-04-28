@@ -1,4 +1,35 @@
 const mongoose = require("mongoose");
+const axios = require("axios");
+const { getCustomers } = require("../../utils/helpers");
+
+const { SPACEX_URL } = process.env;
+
+const SPACEX_API_QUERY = {
+  options: {
+    select: {
+      flight_number: 1,
+      success: 1,
+      upcoming: 1,
+      name: 1,
+      date_local: 1,
+    },
+    pagination: false,
+    populate: [
+      {
+        path: "rocket",
+        select: {
+          name: 1,
+        },
+      },
+      {
+        path: "payloads",
+        select: {
+          customers: 1,
+        },
+      },
+    ],
+  },
+};
 
 // Define a schema for the collection
 const LaunchesSchema = new mongoose.Schema({
@@ -37,7 +68,7 @@ const LaunchesSchema = new mongoose.Schema({
 
   target: {
     type: String,
-    required: true,
+    required: false,
   },
 
   customers: {
@@ -45,8 +76,6 @@ const LaunchesSchema = new mongoose.Schema({
     required: true,
   },
 });
-
-const { getAllPlanets } = require("../planets/Planets.model");
 
 // Create a model based on the schema
 const LaunchModel = mongoose.model("LaunchesCollection", LaunchesSchema);
@@ -121,8 +150,60 @@ const abortLaunchFromModel = async (flightNumber) => {
   }
 };
 
+const loadAllSpaceXData = async () => {
+  try {
+    console.log(SPACEX_URL);
+    console.log("SPACEX_URL");
+
+    const res = await axios.post(SPACEX_URL, SPACEX_API_QUERY);
+
+    const { docs: allLaunchDataFromSpaceX } = res.data;
+
+    console.log(res);
+
+    const allSpaceXDocs = [];
+
+    allLaunchDataFromSpaceX.map((launchDataFromSpaceX) => {
+
+      let success = launchDataFromSpaceX["success"];
+      if (launchDataFromSpaceX["success"] === null) {
+        success = false;
+      }
+
+      const launchData = {
+        flightNumber: launchDataFromSpaceX["flight_number"],
+        success,
+        upcoming: launchDataFromSpaceX["upcoming"],
+        mission: launchDataFromSpaceX["name"],
+        rocket: launchDataFromSpaceX["rocket"]["name"],
+        launchDate: launchDataFromSpaceX["date_local"],
+        customers: getCustomers(launchDataFromSpaceX["payloads"]),
+      };
+      allSpaceXDocs.push(launchData);
+    });
+
+    // this option prevents additional documents from being inserted if one fails
+    const options = { ordered: true };
+    await LaunchModel.insertMany(allSpaceXDocs, options);
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: `${error}` };
+  }
+};
+
 module.exports = {
   createLaunch,
   getFromLaunchesModel,
   abortLaunchFromModel,
+  loadAllSpaceXData,
 };
+
+// flightNumber  -> 101 ->flight_number
+// success -> false -> success
+// upcoming -> false -> upcoming
+// mission -> "Kepler Exploration X" -> name
+// rocket -> "Explorer IS1" -> rocket.name
+// launchDate -> 2023-03-14T10:12:31.179+00:00 -> date_local
+// target -> "Kepler-442 b" -> not applicable
+// customers -> Array -> 0 -> "ZTM" -> 1 ->"NASA" ->  payloads.customers -> payloads is array

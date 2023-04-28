@@ -6,6 +6,7 @@ const { connectToDB } = require("./db");
 const http = require("http");
 const { app } = require("./app");
 const { planetsLoader } = require("./Models/planets/Planets.model.js");
+const { loadAllSpaceXData } = require("./Models/launches/Launches.mongo");
 
 const PORT = process.env.PORT || 8000;
 
@@ -16,7 +17,8 @@ const server = http.createServer(app); // * This is better because now we have e
 // ~# Loading the data from database before starting Server
 const preloadDataBeforeServerStart = async () => {
   await connectToDB();
-  await planetsLoader;
+  await planetsLoader();
+  console.log(await loadAllSpaceXData());
   server.listen(PORT, () => {
     console.log(`Server is running on PORT: ${PORT}`);
   });
