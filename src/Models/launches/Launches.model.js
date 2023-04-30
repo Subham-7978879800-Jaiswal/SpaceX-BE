@@ -6,8 +6,8 @@ const {
   abortLaunchFromModel,
 } = require("./Launches.mongo");
 
-const getAllLaunches = async () => {
-  return await getFromLaunchesModel();
+const getAllLaunches = async (limit,page) => {
+  return await getFromLaunchesModel("",limit,page);
 };
 
 const getLaunchByFlightNumber = async (flightNumber) => {

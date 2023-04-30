@@ -120,7 +120,7 @@ const createLaunch = async ({
   }
 };
 
-const getFromLaunchesModel = async (flightNumber) => {
+const getFromLaunchesModel = async (flightNumber, limit, page) => {
   let findBy = {};
   if (flightNumber) {
     findBy = { flightNumber };
@@ -128,7 +128,9 @@ const getFromLaunchesModel = async (flightNumber) => {
   const projection = { _id: 0, __v: 0 };
 
   try {
-    const documents = await LaunchModel.find(findBy, projection);
+    const documents = await LaunchModel.find(findBy, projection)
+      .skip((page - 1) * limit)
+      .limit(limit);
     return { success: true, documents };
   } catch (error) {
     return { success: false, error: `${error}` };
@@ -152,17 +154,13 @@ const abortLaunchFromModel = async (flightNumber) => {
 
 const loadAllSpaceXData = async () => {
   try {
-   
     const res = await axios.post(SPACEX_URL, SPACEX_API_QUERY);
 
     const { docs: allLaunchDataFromSpaceX } = res.data;
 
-    
-
     const allSpaceXDocs = [];
 
     allLaunchDataFromSpaceX.map((launchDataFromSpaceX) => {
-
       let success = launchDataFromSpaceX["success"];
       if (launchDataFromSpaceX["success"] === null) {
         success = false;

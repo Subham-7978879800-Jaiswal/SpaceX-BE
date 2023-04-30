@@ -22,7 +22,8 @@ const {
 } = require("../../Models/planets/Planets.mongo");
 
 async function httpGetAllLaunches(req, res) {
-  const { success, error = "", documents = [] } = await getAllLaunches();
+  const {limit, page}  = req?.query;
+  const { success, error = "", documents = [] } = await getAllLaunches(limit,page);
 
   // # Handling MongoDb Response. Keeping Response in same Format for Errors - ErrorMessage : string. For UI To Display
   return responseHandler(success, error, documents, res);

@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "pm2 start src/server.js -i max",
+    "start": "pm2 start src/server.js -i 1  --watch",
     "monitor": "pm2 monitor",
-    "stop": "pm2 stop src/server.js"
+    "stop": "pm2 stop src/server.js",
+    "logs": "pm2 logs"
   },
   "keywords": [],
   "author": "",
