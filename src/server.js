@@ -1,4 +1,4 @@
-require("dotenv").config({ path: __dirname + "/.env" });
+require("dotenv").config( "../.env" );
 const { connectToDB } = require("./db");
 
 // ~# Request -> Router -> Controller -> Model
