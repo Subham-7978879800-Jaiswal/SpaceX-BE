@@ -128,7 +128,9 @@ const getFromLaunchesModel = async (flightNumber, limit, page) => {
   const projection = { _id: 0, __v: 0 };
 
   try {
-    const documents = await LaunchModel.find(findBy, projection)
+    const documents = await LaunchModel
+      .find(findBy, projection)
+      .sort({flightNumber:1})
       .skip((page - 1) * limit)
       .limit(limit);
     return { success: true, documents };
