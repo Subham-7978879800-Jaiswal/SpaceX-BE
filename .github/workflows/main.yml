@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - master
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,22 +17,28 @@ jobs:
         mongodb-version: ['4.4']
 
     steps:
-    - name: Git checkout
-      uses: actions/checkout@v3
+      - name: Git checkout
+        uses: actions/checkout@v2
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Start MongoDB
-      uses: supercharge/mongodb-github-action@1.8.0
-      with:
-        mongodb-version: ${{ matrix.mongodb-version }}
+      - name: Start MongoDB
+        id: mongo
+        uses: supercharge/mongodb-github-action@1.8.0
+        with:
+          mongodb-version: ${{ matrix.mongodb-version }}
+          mongodb-args: --port 27017 --bind_ip 127.0.0.1
 
-    - run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - run: npm test
-      env:
-        CI: true
-        MONGODB_URI: mongodb://localhost/nasa
+      - name: Set MongoDB URI
+        run: echo "MONGODB_URI=${{ steps.mongo.outputs.mongodb-uri }}" >> $GITHUB_ENV
+
+      - name: Run tests
+        run: npm test
+        env:
+          CI: true

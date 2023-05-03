@@ -39,6 +39,7 @@ describe("Test POST /launch", () => {
 
   test("It should respond with 200 success", async () => {
     const response = await request(app).get("/launches");
+    console.log(response);
     expect(response.statusCode).toBe(200);
   });
 });
