@@ -1,10 +1,12 @@
 const request = require("supertest");
 const { app } = require("../../app");
 const { connectToDB, disconnectDB } = require("../../db");
+const { planetsLoader } = require("../planets/Planets.model.js");
 
 describe("Test GET /launches", () => {
   beforeAll(async () => {
     await connectToDB();
+    await planetsLoader();
   });
   afterAll(() => {
     disconnectDB();
@@ -16,12 +18,13 @@ describe("Test GET /launches", () => {
 });
 
 describe("Test POST /launch", () => {
-      beforeAll(async () => {
-        await connectToDB();
-      });
-      afterAll(() => {
-        disconnectDB();
-      });
+  beforeAll(async () => {
+    await connectToDB();
+    await planetsLoader();
+  });
+  afterAll(() => {
+    disconnectDB();
+  });
   test("It should respond with 200 success", async () => {
     const response = await request(app).post("/launches").send({
       mission: "Testing Record",
@@ -48,5 +51,3 @@ describe("Test POST /launch", () => {
     expect(response.statusCode).toBe(400);
   });
 });
-
-
