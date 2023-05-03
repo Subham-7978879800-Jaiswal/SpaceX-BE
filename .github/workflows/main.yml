@@ -34,3 +34,4 @@ jobs:
     - run: npm test
       env:
         CI: true
+        MONGODB_URI: mongodb://localhost/nasa
