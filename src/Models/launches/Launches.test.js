@@ -7,7 +7,7 @@ describe("Test GET /launches", () => {
   beforeAll(async () => {
     await connectToDB();
     await planetsLoader();
-  });
+  }, 10000); // increase timeout to 10 seconds);
   afterAll(() => {
     disconnectDB();
   });
@@ -21,7 +21,7 @@ describe("Test POST /launch", () => {
   beforeAll(async () => {
     await connectToDB();
     await planetsLoader();
-  });
+  }, 10000); // increase timeout to 10 seconds);
   afterAll(() => {
     disconnectDB();
   });
