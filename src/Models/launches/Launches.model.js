@@ -1,5 +1,3 @@
-const launches = new Map();
-
 const {
   createLaunch,
   getFromLaunchesModel,
@@ -27,7 +25,6 @@ const abortLaunch = async (flightNumber) => {
 };
 
 module.exports = {
-  launches,
   getAllLaunches,
   addNewLaunch,
   abortLaunch,
