@@ -1,44 +1,35 @@
-name: NASA BE build
+name: Run tests
 
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x, 18.x]
-        mongodb-version: ['4.4']
+        node-version: [14.x, 16.x, 18.x]
+        mongodb-version: ['4.2', '4.4', '5.0', '6.0']
 
     steps:
-      - name: Git checkout
-        uses: actions/checkout@v2
+    - name: Git checkout
+      uses: actions/checkout@v3
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
 
-      - name: Start MongoDB
-        id: mongo
-        uses: supercharge/mongodb-github-action@1.8.0
-        with:
-          mongodb-version: ${{ matrix.mongodb-version }}
-          mongodb-args: --port 27017 --bind_ip 127.0.0.1
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.8.0
+      with:
+        mongodb-version: ${{ matrix.mongodb-version }}
+        mongodb-replica-set: test-rs
+        mongodb-port: 4000
 
-      - name: Install dependencies
-        run: npm install
+    - name: Install dependencies
+      run: npm install
 
-      - name: Set MongoDB URI
-        run: echo "MONGODB_URI=${{ steps.mongo.outputs.mongodb-uri }}" >> $GITHUB_ENV
-
-      - name: Run tests
-        run: npm test
-        env:
-          CI: true
+    - name: Run tests
+      run: npm test
+      env:
+        CI: true
