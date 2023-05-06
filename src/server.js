@@ -8,7 +8,7 @@ const { app } = require("./app");
 const { planetsLoader } = require("./Models/planets/Planets.model.js");
 const { loadAllSpaceXData } = require("./Models/launches/Launches.mongo");
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 4000;
 
 const server = http.createServer(app); // * This is better because now we have express capabilities + Bare bone node server capabilities some which express dont have
 
