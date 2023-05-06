@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "pm2 start  src/server.js -i 1  --watch",
-    "start-docker": "pm2 start src/server.js -i max  --watch", 
+    "build": "pm2 build", 
+    "start": "pm2 start  src/server.js -i max  --watch",
+    "start-docker": "pm2 start src/server.js -i max", 
     "monitor": "pm2 monitor",
     "stop": "pm2 stop src/server.js",
     "logs": "pm2 logs"
