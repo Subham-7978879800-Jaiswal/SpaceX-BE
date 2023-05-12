@@ -58,7 +58,7 @@ jobs:
       - name: Push Docker image
         run: docker push subhamjaiswal79788/nasa-be:${{ github.sha }}
   ssh-to-ec2-and-deploy:
-        needs: deploy  
+        needs: docker-image  
         runs-on: ubuntu-latest
         steps:
         - name: Checkout code
