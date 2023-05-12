@@ -10,7 +10,7 @@ const { LaunchesRouter } = require("./Routers/launches/Launches.router");
 const app = express();
 
 const corsOption = {
-  origin: ["http://3.110.86.75:4000"],
+  origin: ["http://3.110.86.75:3000"],
 };
 
 app.use(cors(corsOption));
