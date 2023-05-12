@@ -58,6 +58,7 @@ jobs:
       - name: Push Docker image
         run: docker push subhamjaiswal79788/nasa-be:${{ github.sha }}
   ssh-to-ec2:
+        needs: deploy  
         runs-on: ubuntu-latest
         steps:
         - name: Checkout code
@@ -71,4 +72,10 @@ jobs:
             NAME: production
             PORT:  ${{ secrets.PORT }}
             USER: ubuntu
-        - run: ssh production "ls -la;id; echo hehe > h.txt "
+            script: |
+              docker stop nasa-be || true
+              docker rm nasa-be || true
+
+              docker pull subhamjaiswal79788/nasa-be:${{ github.sha }}
+
+              docker run -d --name nasa-be -p  ${{ secrets.PORT }}: ${{ secrets.PORT }} subhamjaiswal79788/nasa-be:${{ github.sha }}
