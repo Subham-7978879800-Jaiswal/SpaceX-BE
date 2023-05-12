@@ -10,7 +10,7 @@
     "start-docker": "pm2 start src/server.js -i max", 
     "monitor": "pm2 monitor",
     "stop": "pm2 stop src/server.js",
-    "logs": "pm2 logs"
+    "logs": "pm2  logs"
   },
   "keywords": [],
   "author": "",
