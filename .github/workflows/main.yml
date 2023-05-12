@@ -35,7 +35,7 @@ jobs:
         env:
           CI: true
           MONGODB_URI: mongodb://localhost/nasa
-  deploy:
+  docker-image:
     needs: build
     runs-on: ubuntu-latest
 
@@ -57,7 +57,7 @@ jobs:
 
       - name: Push Docker image
         run: docker push subhamjaiswal79788/nasa-be:${{ github.sha }}
-  ssh-to-ec2:
+  ssh-to-ec2-and-deploy:
         needs: deploy  
         runs-on: ubuntu-latest
         steps:
