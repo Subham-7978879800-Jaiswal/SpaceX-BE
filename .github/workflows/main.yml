@@ -57,3 +57,20 @@ jobs:
 
       - name: Push Docker image
         run: docker push subhamjaiswal79788/nasa-be:${{ github.sha }}
+
+
+      - name: SSH into EC2 instance and run Docker image
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          port: ${{ secrets.EC2_SSH_PORT }}
+          script: 
+            docker stop nasa-be || true
+            docker rm nasa-be || true
+
+ 
+            docker pull subhamjaiswal79788/nasa-be:${{ github.sha }}
+
+            docker run -d --name nasa-be -p 3000:3000 subhamjaiswal79788/nasa-be:${{ github.sha }}
