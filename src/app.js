@@ -11,7 +11,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://3.110.86.75:4000", // Replace with your allowed origin
+    origin: "*", // Replace with your allowed origin
     methods: ["GET", "POST"], // Specify the allowed HTTP methods
     allowedHeaders: ["Content-Type"], // Specify the allowed headers
     optionsSuccessStatus: 200,
