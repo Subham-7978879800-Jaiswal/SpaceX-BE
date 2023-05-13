@@ -12,9 +12,6 @@ const app = express();
 app.use(
   cors({
     origin: "*", // Replace with your allowed origin
-    methods: ["GET", "POST"], // Specify the allowed HTTP methods
-    allowedHeaders: ["Content-Type"], // Specify the allowed headers
-    optionsSuccessStatus: 200,
   })
 );      // Set the response status for preflight requests));
 app.use(morgan("combined"));
