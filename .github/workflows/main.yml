@@ -72,10 +72,12 @@ jobs:
             NAME: production
             PORT:  ${{ secrets.PORT }}
             USER: ubuntu
-            script: |
-              docker stop nasa-be || true
-              docker rm nasa-be || true
 
-              docker pull subhamjaiswal79788/nasa-be:${{ github.sha }}
-
-              docker run -d --name nasa-be -p  ${{ secrets.PORT }}: ${{ secrets.PORT }} subhamjaiswal79788/nasa-be:${{ github.sha }}
+        - name: Execute remote script via SSH
+          run: |
+            ssh ubuntu@${{ secrets.HOST }} -p ${{ secrets.PORT }} -i ${{ secrets.TEST }} << 'EOF'
+            docker stop nasa-be || true
+            docker rm nasa-be || true
+            docker pull subhamjaiswal79788/nasa-be:${{ github.sha }}
+            docker run -d --name nasa-be -p ${{ secrets.PORT }}:${{ secrets.PORT }} subhamjaiswal79788/nasa-be:${{ github.sha }}
+            EOF
