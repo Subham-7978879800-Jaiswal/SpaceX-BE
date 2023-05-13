@@ -78,5 +78,5 @@ jobs:
             docker stop nasa-be || true
             docker rm nasa-be || true
             docker pull subhamjaiswal79788/nasa-be:${{ github.sha }}
-            docker run -d --name nasa-be -p ${{ secrets.PORT }}:${{ secrets.PORT }} subhamjaiswal79788/nasa-be:${{ github.sha }}
+            docker run --restart=always -p ${{ secrets.PORT }}:${{ secrets.PORT }} subhamjaiswal79788/nasa-be:${{ github.sha }}
             EOF
