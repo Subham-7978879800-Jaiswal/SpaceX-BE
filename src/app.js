@@ -11,9 +11,22 @@ const app = express();
 
 app.use(
   cors({
-    origin: "*", // Replace with your allowed origin
+    origin: "*",
   })
-);      // Set the response status for preflight requests));
+);      
+
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+
+
+
+
 app.use(morgan("combined"));
 
 app.use(express.json()); // ~* Middleware added, This middleware takes the request body, converts it to JSON and add it to req in the callback function
