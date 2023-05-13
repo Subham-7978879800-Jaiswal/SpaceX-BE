@@ -70,7 +70,6 @@ jobs:
             ORIGIN: ${{ secrets.HOST }}
             SSHKEY: ${{ secrets.TEST }}
             NAME: production
-            PORT:  ${{ secrets.PORT }}
             USER: ubuntu
         - run: ssh production "ls -la;id; echo hehe > h.txt "
 
