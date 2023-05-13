@@ -72,10 +72,10 @@ jobs:
             NAME: production
             PORT:  ${{ secrets.PORT }}
             USER: ubuntu
+        - run: ssh production "ls -la;id; echo hehe > h.txt "
 
         - name: Execute remote script via SSH
           run: |
-            ssh ubuntu@${{ secrets.HOST }} -p ${{ secrets.PORT }} -i ${{ secrets.TEST }} << 'EOF'
             docker stop nasa-be || true
             docker rm nasa-be || true
             docker pull subhamjaiswal79788/nasa-be:${{ github.sha }}
