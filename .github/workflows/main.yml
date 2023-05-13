@@ -70,7 +70,7 @@ jobs:
             ORIGIN: ${{ secrets.HOST }}
             SSHKEY: ${{ secrets.TEST }}
             NAME: production
-            USER: ubuntu
+            USER: ec2-user
         - run: ssh production "ls -la;id; echo hehe > h.txt "
 
         - name: Execute remote script via SSH
