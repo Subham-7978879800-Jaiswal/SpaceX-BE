@@ -58,25 +58,25 @@ jobs:
       - name: Push Docker image
         run: docker push subhamjaiswal79788/nasa-be:${{ github.sha }}
   ssh-to-ec2-and-deploy:
-        needs: docker-image  
-        runs-on: ubuntu-latest
-        steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
+    needs: docker-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-        - name: Set up SSH key
-          uses: LuisEnMarroquin/setup-ssh-action@v2.0.0
-          with:
-            ORIGIN: ${{ secrets.HOST }}
-            SSHKEY: ${{ secrets.TEST }}
-            NAME: production
-            USER: ec2-user
-        - run: ssh production "ls -la;id; echo hehe > h.txt "
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-        - name: Execute remote script via SSH
-          run: |
+      - name: SSH into EC2 instance
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
             docker stop nasa-be || true
             docker rm nasa-be || true
             docker pull subhamjaiswal79788/nasa-be:${{ github.sha }}
-            docker run --restart=always -p ${{ secrets.PORT }}:${{ secrets.PORT }} subhamjaiswal79788/nasa-be:${{ github.sha }};
-          shell: bash
+            docker run --restart=always -p ${{ secrets.PORT }}:${{ secrets.PORT }} subhamjaiswal79788/nasa-be:${{ github.sha }}
