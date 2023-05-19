@@ -79,4 +79,7 @@ jobs:
             docker stop nasa-be || true
             docker rm nasa-be || true
             docker pull subhamjaiswal79788/nasa-be:${{ github.sha }}
-            docker run --restart=always -d -p ${{ secrets.PORT }}:${{ secrets.PORT }} subhamjaiswal79788/nasa-be:${{ github.sha }}
+            docker run --restart=always -d -p ${{ secrets.PORT }}:${{ secrets.PORT }} \
+            -e MONGODB_URI=${{ secrets.MONGODB_URI }} \
+            -e SPACEX_URL=${{ secrets.SPACEX_URL }} \
+            subhamjaiswal79788/nasa-be:${{ github.sha }}
