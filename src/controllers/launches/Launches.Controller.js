@@ -2,6 +2,7 @@ const {
   getAllLaunches,
   addNewLaunch,
   abortLaunch,
+  upcomingLaunches,
 } = require("../../Models/launches/Launches.model");
 
 const {
@@ -95,4 +96,22 @@ async function httpAbortLaunch(req, res) {
   return responseHandler(success, error, document, res);
 }
 
-module.exports = { httpGetAllLaunches, httpAddToLaunches, httpAbortLaunch };
+
+async function httpUpcomingLaunches(req, res) {
+  console.log("Upcoming");
+  const {
+    success,
+    error = "",
+    documents = [],
+  } = await upcomingLaunches();
+
+  // # Handling MongoDb Errors. Keeping Response in same Format for Errors - ErrorMessage : string. For UI To Display
+  return responseHandler(success, error, documents, res);
+}
+
+module.exports = {
+  httpGetAllLaunches,
+  httpAddToLaunches,
+  httpAbortLaunch,
+  httpUpcomingLaunches,
+};

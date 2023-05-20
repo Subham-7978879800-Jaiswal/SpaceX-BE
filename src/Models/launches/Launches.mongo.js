@@ -128,11 +128,21 @@ const getFromLaunchesModel = async (flightNumber, limit, page) => {
   const projection = { _id: 0, __v: 0 };
 
   try {
-    const documents = await LaunchModel
-      .find(findBy, projection)
-      .sort({flightNumber:1})
+    const documents = await LaunchModel.find(findBy, projection)
+      .sort({ flightNumber: 1 })
       .skip((page - 1) * limit)
       .limit(limit);
+    return { success: true, documents };
+  } catch (error) {
+    return { success: false, error: `${error}` };
+  }
+};
+
+const getUpcomingLaunches = async () => {
+  // Should have done with mongodb filter but its ok
+  try {
+    let { documents, success, error } = await getFromLaunchesModel();
+    documents = documents.filter((document) => document.upcoming);
     return { success: true, documents };
   } catch (error) {
     return { success: false, error: `${error}` };
@@ -195,6 +205,7 @@ module.exports = {
   getFromLaunchesModel,
   abortLaunchFromModel,
   loadAllSpaceXData,
+  getUpcomingLaunches
 };
 
 // flightNumber  -> 101 ->flight_number

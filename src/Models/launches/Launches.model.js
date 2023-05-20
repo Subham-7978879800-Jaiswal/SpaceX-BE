@@ -2,6 +2,7 @@ const {
   createLaunch,
   getFromLaunchesModel,
   abortLaunchFromModel,
+  getUpcomingLaunches,
 } = require("./Launches.mongo");
 
 const getAllLaunches = async (limit,page) => {
@@ -24,9 +25,14 @@ const abortLaunch = async (flightNumber) => {
   return await abortLaunchFromModel(flightNumber);
 };
 
+const upcomingLaunches = async () => {
+  return await getUpcomingLaunches();
+};
+
 module.exports = {
   getAllLaunches,
   addNewLaunch,
   abortLaunch,
   getLaunchByFlightNumber,
+  upcomingLaunches,
 };
