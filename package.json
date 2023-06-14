@@ -6,8 +6,9 @@
   "scripts": {
     "test": "jest",
     "build": "pm2 build",
-    "start": "pm2 start  src/server.js -i max  --watch",
+    "start": "pm2 start  src/server.js -i 1  --watch",
     "start-docker": "pm2 start src/server.js -i max",
+    "local-start": "nodemon src/server.js",
     "monitor": "pm2 monitor",
     "stop": "pm2 stop src/server.js",
     "logs": "pm2  logs"
@@ -17,6 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^1.4.0",
+    "bcrypt": "^5.1.0",
     "cookie-session": "^2.0.0",
     "cors": "^2.8.5",
     "csv-parse": "^5.3.5",

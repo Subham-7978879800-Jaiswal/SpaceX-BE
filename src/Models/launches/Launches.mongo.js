@@ -208,11 +208,3 @@ module.exports = {
   getUpcomingLaunches
 };
 
-// flightNumber  -> 101 ->flight_number
-// success -> false -> success
-// upcoming -> false -> upcoming
-// mission -> "Kepler Exploration X" -> name
-// rocket -> "Explorer IS1" -> rocket.name
-// launchDate -> 2023-03-14T10:12:31.179+00:00 -> date_local
-// target -> "Kepler-442 b" -> not applicable
-// customers -> Array -> 0 -> "ZTM" -> 1 ->"NASA" ->  payloads.customers -> payloads is array
