@@ -6,14 +6,11 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const passport = require("passport");
 
-require("./passport");
 
 const { PlanetsRouter } = require("./Routers/planets/Planets.router");
 const { LaunchesRouter } = require("./Routers/launches/Launches.router");
 
 const { userRouter } = require("./Routers/users/users.router");
-
-const {CLIENT_URL} = process.env 
 
 const app = express();
 
@@ -51,22 +48,10 @@ app.get(
   })
 );
 
-app.use(
-  "/auth/google/callback",
-  passport.authenticate("google", {
-    failureRedirect: "/failed",
-    session: false,
-  }),
-  (req, res) => {
-    res.redirect(CLIENT_URL);
-  }
-);
-
 app.use("/planets", PlanetsRouter); // ~^ Mounting a Router, This router will take friends as its initial path and add it in front of any routes defined inside it
 
 app.use("/launches", LaunchesRouter);
 
 app.use("/users", userRouter);
-
 
 module.exports = { app };

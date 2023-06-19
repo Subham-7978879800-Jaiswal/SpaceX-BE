@@ -28,9 +28,9 @@ const createUserInDB = async (data) => {
 const checkUserExistInDB = async (emailId) => {
   try {
     // save the new user
-
+    console.log("emailId");
     const res = await UserModel.find({ emailId: emailId });
-
+    console.log(res);
     if (res.length !== 0) {
       return { success: true, document: res[0] };
     } else {

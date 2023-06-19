@@ -1,5 +1,8 @@
 const { createUserInDB, checkUserExistInDB } = require("./user.mongo");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+const { JWT_SECRET } = process.env;
 
 const createUser = async (emailId, password) => {
   try {
@@ -13,11 +16,32 @@ const createUser = async (emailId, password) => {
   }
 };
 
-const loginUser = async (emailId, password) => {
+const issueToken = (emailId) => {
+  //   create JWT token
+  const token = jwt.sign(
+    {
+      userEmail: emailId,
+    },
+    JWT_SECRET,
+    { expiresIn: "24h" }
+  );
+  return token;
+};
+
+const loginUser = async (emailId, password, skipPasswordComparison) => {
   try {
-    const x = await PasswordMatches(emailId, password);
-    console.log("Create JWT token");
-    return x;
+    if (!skipPasswordComparison) {
+      const { success, document, error } = await PasswordMatches(
+        emailId,
+        password
+      );
+      if (!success) {
+        return { success, error };
+      }
+    }
+
+    const token = issueToken(emailId);
+    return { success: true, token: token };
   } catch (error) {
     return { success: false, error: `${error}` };
   }
@@ -26,8 +50,9 @@ const loginUser = async (emailId, password) => {
 const PasswordMatches = async (emailId, password) => {
   try {
     const { success, document } = await checkUserExistInDB(emailId);
-
+    console.log(success);
     if (!success) {
+      console.log("PasswordMatches");
       return { success: false, error: `User Doesnt exist` };
     }
 
@@ -41,4 +66,8 @@ const PasswordMatches = async (emailId, password) => {
   }
 };
 
-module.exports = { createUser, PasswordMatches, loginUser };
+const userExist = async (emailId) => {
+  return await checkUserExistInDB(emailId);
+};
+
+module.exports = { createUser, PasswordMatches, loginUser, userExist };

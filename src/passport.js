@@ -22,6 +22,10 @@ passport.use(
       passReqToCallback: true,
     },
     function (request, accessToken, refreshToken, profile, done) {
+      console.log(request);
+      console.log(accessToken);
+      console.log(refreshToken);
+      console.log(profile);
       return done(null, profile);
     }
   )
